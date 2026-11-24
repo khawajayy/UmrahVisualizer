@@ -1,0 +1,10 @@
+{
+  "name": "Umrah Mission Control",
+  "short_name": "Umrah 2026",
+  "description": "Itinerary, Umrah guide, Ziyarat maps and duas for Nov 29 – Dec 11, 2026.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#07090E",
+  "theme_color": "#07090E",
+  "icons": [{ "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}
