@@ -2,6 +2,8 @@
 
 Trip companion for our Umrah, 29 Nov – 11 Dec 2026. Vite + React + TypeScript, Tailwind v4, Framer Motion, Leaflet.
 
+**Live:** https://khawajayy.github.io/UmrahVisualizer/ (deployed to GitHub Pages on every push to `main`)
+
 ## Run
 
 ```powershell
