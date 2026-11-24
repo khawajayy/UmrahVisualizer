@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { ChevronLeft, ChevronRight, Lightbulb } from 'lucide-react'
 import { DAYS, mapsDirections, mapsSearch, PLACES, type DayPlan, type Place } from '../data/umrahData'
 import { useNow } from '../hooks/useNow'
-import { flashElement, useApp } from '../lib/nav'
+import { flashElement, useApp, useClock } from '../lib/nav'
 import { TZ_AST, ymd } from '../lib/time'
 import { KIND_META } from './FlightTimeline'
 import { MapsLink, SectionHeader } from './ui'
@@ -19,6 +19,7 @@ const CITY_COLOR: Record<DayPlan['city'], string> = {
 export function ItineraryExplorer() {
   const now = useNow(60_000)
   const { focus } = useApp()
+  const clock = useClock()
   const today = ymd(now, TZ_AST)
   const [idx, setIdx] = useState(() => Math.max(0, DAYS.findIndex((d) => d.date === today)))
   const stripRef = useRef<HTMLDivElement>(null)
@@ -86,7 +87,7 @@ export function ItineraryExplorer() {
                 {day.label} 2026 · {day.city}
               </div>
               <h3 className="mt-1 text-2xl font-semibold text-white sm:text-3xl">{day.title}</h3>
-              <p className="mt-2 max-w-2xl text-slate-300">{day.summary}</p>
+              <p className="mt-2 max-w-2xl text-slate-300">{clock.text(day.summary)}</p>
             </div>
             <div className="flex gap-2">
               <button className="btn-ghost !px-2.5" disabled={idx === 0} onClick={() => setIdx(idx - 1)} aria-label="Previous day">
@@ -107,10 +108,10 @@ export function ItineraryExplorer() {
                   <motion.li key={i} initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.04 }} className="relative">
                     <span className="absolute -left-[27px] top-1.5 h-3 w-3 rounded-full border-2 border-obsidian" style={{ background: color, boxShadow: `0 0 10px ${color}` }} />
                     <div className="flex flex-wrap items-baseline gap-x-3">
-                      <span className="w-20 shrink-0 font-mono text-xs text-gold/80">{e.time}</span>
-                      <span className="font-medium text-slate-100">{e.title}</span>
+                      <span className="w-20 shrink-0 font-mono text-xs text-gold/80">{clock.text(e.time)}</span>
+                      <span className="font-medium text-slate-100">{clock.text(e.title)}</span>
                     </div>
-                    {e.note && <p className="mt-0.5 pl-[92px] text-sm text-slate-400 max-sm:pl-0">{e.note}</p>}
+                    {e.note && <p className="mt-0.5 pl-[92px] text-sm text-slate-400 max-sm:pl-0">{clock.text(e.note)}</p>}
                   </motion.li>
                 )
               })}

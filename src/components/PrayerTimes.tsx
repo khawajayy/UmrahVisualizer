@@ -3,7 +3,8 @@ import { MoonStar } from 'lucide-react'
 import { PLACES, PRAYER_NOTE, type CityKey } from '../data/umrahData'
 import { useNow } from '../hooks/useNow'
 import { prayerTimes } from '../lib/prayer'
-import { fmtTime, pad, splitDuration, TZ_AST, ymd } from '../lib/time'
+import { useClock } from '../lib/nav'
+import { pad, splitDuration, TZ_AST, ymd } from '../lib/time'
 
 /** Which city the itinerary puts you in on a given AST date. */
 export function cityForDate(date: string): CityKey {
@@ -12,6 +13,7 @@ export function cityForDate(date: string): CityKey {
 
 export function PrayerTimes() {
   const now = useNow(1000)
+  const clock = useClock()
   const today = ymd(now, TZ_AST)
   const [override, setOverride] = useState<CityKey | null>(null)
   const city = override ?? cityForDate(today)
@@ -52,7 +54,7 @@ export function PrayerTimes() {
           <div className="font-mono text-2xl tabular-nums text-white">
             {pad(d.hours + d.days * 24)}:{pad(d.minutes)}:{pad(d.seconds)}
           </div>
-          <div className="font-mono text-xs text-tele/80">at {fmtTime(next.at, TZ_AST)} AST</div>
+          <div className="font-mono text-xs text-tele/80">at {clock.time(next.at, TZ_AST)} AST</div>
         </div>
       </div>
 
@@ -62,7 +64,7 @@ export function PrayerTimes() {
           return (
             <li key={x.key} className={`rounded-lg border px-2 py-2 text-center ${isNext ? 'border-tele/50 bg-tele/10' : 'border-white/[0.06] bg-white/[0.02]'} ${x.key === 'sunrise' ? 'opacity-60' : ''}`}>
               <div className="text-[11px] text-mist">{x.name}</div>
-              <div className={`font-mono text-sm tabular-nums ${isNext ? 'text-tele' : 'text-slate-100'}`}>{fmtTime(x.at, TZ_AST)}</div>
+              <div className={`font-mono text-sm tabular-nums ${isNext ? 'text-tele' : 'text-slate-100'}`}>{clock.time(x.at, TZ_AST)}</div>
             </li>
           )
         })}

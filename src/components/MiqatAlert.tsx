@@ -1,12 +1,14 @@
 import { AlertTriangle, Check } from 'lucide-react'
 import { MIQATS, PLACES, TALBIYAH } from '../data/umrahData'
 import { useLocalStorage } from '../hooks/useLocalStorage'
+import { useClock } from '../lib/nav'
 
 // Projection for the Hijaz schematic: 400×560 viewBox, lat 25.2 → 20.2, ~103 px per degree of longitude from 37.6°E.
 const X = (lng: number) => (lng - 37.6) * 103
 const Y = (lat: number) => (25.2 - lat) * 112
 
 export function MiqatMap() {
+  const clock = useClock()
   const med = { x: X(PLACES.med.lng), y: Y(PLACES.med.lat) }
   const jed = { x: X(PLACES.jed.lng), y: Y(PLACES.jed.lat) }
   const mak = { x: X(PLACES.haram.lng), y: Y(PLACES.haram.lat) }
@@ -96,7 +98,7 @@ export function MiqatMap() {
         <g key={a.label}>
           <circle cx={a.p.x} cy={a.p.y} r="5" fill="#07090E" stroke="#38BDF8" strokeWidth="2" />
           <text x={a.p.x + a.dx} y={a.p.y - 2} fill="#e0f2fe" fontSize="12" fontFamily="var(--font-mono)" fontWeight="600" textAnchor={a.anchor}>{a.label}</text>
-          <text x={a.p.x + a.dx} y={a.p.y + 11} fill="#7dd3fc" fontSize="9" textAnchor={a.anchor}>{a.sub}</text>
+          <text x={a.p.x + a.dx} y={a.p.y + 11} fill="#7dd3fc" fontSize="9" textAnchor={a.anchor}>{clock.text(a.sub)}</text>
         </g>
       ))}
       <circle cx={mad.x} cy={mad.y} r="3" fill="#94a3b8" />

@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import { BedDouble, Car, Clock, Landmark, MountainSnow, Plane, type LucideIcon } from 'lucide-react'
 import { DAYS, MILESTONES, type MilestoneKind } from '../data/umrahData'
 import { useNow } from '../hooks/useNow'
-import { useApp } from '../lib/nav'
+import { useApp, useClock } from '../lib/nav'
 import { TZ_AST, ymd } from '../lib/time'
 
 export const KIND_META: Record<MilestoneKind, { icon: LucideIcon; color: string; label: string }> = {
@@ -17,6 +17,7 @@ export const KIND_META: Record<MilestoneKind, { icon: LucideIcon; color: string;
 export function FlightTimeline() {
   const now = useNow(30_000)
   const { go } = useApp()
+  const clock = useClock()
   const t = now.getTime()
 
   return (
@@ -77,8 +78,8 @@ export function FlightTimeline() {
                   {m.alert === 'zamzam' && <span className="rounded bg-tele/15 px-1.5 py-0.5 font-mono text-[9px] tracking-widest text-tele">ZAMZAM</span>}
                   {m.tbc && <span className="rounded border border-white/10 px-1.5 py-0.5 font-mono text-[9px] tracking-widest text-slate-500">TIME TBC</span>}
                 </div>
-                <div className="mt-0.5 font-mono text-xs text-gold/80">{m.timeLabel}</div>
-                <p className="mt-1.5 text-sm leading-relaxed text-slate-400 group-hover:text-slate-300">{m.detail}</p>
+                <div className="mt-0.5 font-mono text-xs text-gold/80">{clock.text(m.timeLabel)}</div>
+                <p className="mt-1.5 text-sm leading-relaxed text-slate-400 group-hover:text-slate-300">{clock.text(m.detail)}</p>
               </button>
             </motion.li>
           )

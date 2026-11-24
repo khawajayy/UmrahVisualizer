@@ -3,7 +3,8 @@ import { motion } from 'framer-motion'
 import { Plane, Radio } from 'lucide-react'
 import { MILESTONES } from '../data/umrahData'
 import { useNow } from '../hooks/useNow'
-import { fmtDate, fmtTime, hijri, pad, splitDuration, tripStatus, TZ_AST, TZ_PKT } from '../lib/time'
+import { fmtDate, hijri, pad, splitDuration, tripStatus, TZ_AST, TZ_PKT } from '../lib/time'
+import { useClock } from '../lib/nav'
 import { ProgressRing } from './ui'
 
 function useRingSize() {
@@ -31,6 +32,7 @@ function Unit({ value, label, max, size }: { value: number; label: string; max: 
 export function CommandHeader() {
   const now = useNow(1000)
   const ring = useRingSize()
+  const clock = useClock()
   const status = tripStatus(now)
   const target = status.phase === 'pre' ? status.toStart : status.next ? new Date(status.next.start).getTime() - now.getTime() : 0
   const d = splitDuration(target)
@@ -80,7 +82,7 @@ export function CommandHeader() {
             <div className="rounded-xl border border-white/10 bg-black/30 p-3.5">
               <div className="label flex items-center gap-1.5"><Radio size={11} /> {status.phase === 'live' && status.current ? 'Now' : 'Next up'}</div>
               <div className="mt-1 font-medium text-white">{(status.phase === 'live' && status.current ? status.current : status.next ?? MILESTONES[0]).title}</div>
-              <div className="mt-0.5 text-xs text-mist">{(status.phase === 'live' && status.current ? status.current : status.next ?? MILESTONES[0]).timeLabel}</div>
+              <div className="mt-0.5 text-xs text-mist">{clock.text((status.phase === 'live' && status.current ? status.current : status.next ?? MILESTONES[0]).timeLabel)}</div>
             </div>
             <div className="rounded-xl border border-white/10 bg-black/30 p-3.5">
               <div className="label flex items-center gap-1.5"><Plane size={11} /> Legs complete</div>
@@ -110,12 +112,12 @@ export function CommandHeader() {
           <div className="grid w-full max-w-sm grid-cols-2 gap-2 text-center">
             <div className="rounded-xl border border-white/10 bg-black/30 px-3 py-2.5">
               <div className="label">Lahore · PKT</div>
-              <div className="mt-0.5 font-mono text-xl tabular-nums text-white">{fmtTime(now, TZ_PKT)}</div>
+              <div className="mt-0.5 font-mono text-xl tabular-nums text-white">{clock.time(now, TZ_PKT)}</div>
               <div className="text-[11px] text-mist">{fmtDate(now, TZ_PKT)}</div>
             </div>
             <div className="rounded-xl border border-gold/20 bg-gold/[0.05] px-3 py-2.5">
               <div className="label text-gold/70">Makkah · AST</div>
-              <div className="mt-0.5 font-mono text-xl tabular-nums text-gold-soft">{fmtTime(now, TZ_AST)}</div>
+              <div className="mt-0.5 font-mono text-xl tabular-nums text-gold-soft">{clock.time(now, TZ_AST)}</div>
               <div className="text-[11px] text-mist">{fmtDate(now, TZ_AST)}</div>
             </div>
           </div>

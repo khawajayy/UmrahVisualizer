@@ -29,7 +29,7 @@ npm run preview    # serve the production build (enables offline caching)
 ## Notes
 
 - All content lives in `src/data/umrahData.ts`. Edit times there once the group confirms them (items marked TIME TBC).
-- Checklists, counters, favourites and the man/woman setting are saved in localStorage on each phone.
+- Checklists, counters, favourites, the man/woman setting and the 12h/24h clock choice (clock button in the header) are saved in localStorage on each phone.
 - Preview the app mid-trip with `?now=`, e.g. `http://localhost:5173/?now=2026-11-30T10:00:00%2B03:00`.
 - The production build registers a service worker that caches the app, fonts, photos and any map tiles you've viewed. Open every view once on hotel Wi-Fi before relying on it offline.
 - Map tiles come from Esri's Dark Gray Canvas (no API key). CARTO's dark tiles now require a key.

@@ -3,8 +3,19 @@ import { MILESTONES, TRIP_END, TRIP_START, type Milestone } from '../data/umrahD
 export const TZ_AST = 'Asia/Riyadh'
 export const TZ_PKT = 'Asia/Karachi'
 
-export const fmtTime = (d: Date, timeZone: string) =>
-  new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone }).format(d)
+export const fmtTime = (d: Date, timeZone: string, h12 = false) =>
+  h12
+    ? new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit', hour12: true, timeZone }).format(d)
+    : new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone }).format(d)
+
+/** Rewrites HH:MM times inside itinerary text ("21:00 PKT", "00:30–03:30") as 12-hour times when h12 is on. */
+export function clockText(s: string, h12: boolean) {
+  if (!h12) return s
+  return s.replace(/(?<![\d:])([01]?\d|2[0-3]):([0-5]\d)(?![\d:])/g, (_, h: string, m: string) => {
+    const H = Number(h)
+    return `${H % 12 === 0 ? 12 : H % 12}:${m} ${H < 12 ? 'AM' : 'PM'}`
+  })
+}
 
 export const fmtDate = (d: Date, timeZone: string) =>
   new Intl.DateTimeFormat('en-GB', { weekday: 'short', day: 'numeric', month: 'short', timeZone }).format(d)

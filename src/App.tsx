@@ -23,6 +23,7 @@ function viewFromHash(): View {
 export default function App() {
   const [view, setView] = useState<View>(viewFromHash)
   const [role, setRole] = useLocalStorage<Role>('role', 'man')
+  const [clock12, setClock12] = useLocalStorage<boolean>('clock12', false)
   const [focus, setFocus] = useState<Focus | null>(null)
   const [paletteOpen, setPaletteOpen] = useState(false)
 
@@ -63,7 +64,10 @@ export default function App() {
     }
   }, [])
 
-  const ctx = useMemo(() => ({ view, focus, role, setRole, go, openPalette: () => setPaletteOpen(true) }), [view, focus, role, setRole, go])
+  const ctx = useMemo(
+    () => ({ view, focus, role, setRole, go, openPalette: () => setPaletteOpen(true), clock12, setClock12 }),
+    [view, focus, role, setRole, go, clock12, setClock12],
+  )
 
   return (
     <AppContext.Provider value={ctx}>

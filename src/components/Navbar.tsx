@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { BookOpenText, CalendarDays, Compass, Gauge, Map, Search, Sparkles } from 'lucide-react'
+import { BookOpenText, CalendarDays, Clock, Compass, Gauge, Map, Search, Sparkles } from 'lucide-react'
 import { useApp, type View } from '../lib/nav'
 import { RoleToggle } from './ui'
 
@@ -13,7 +13,7 @@ export const NAV_ITEMS: { view: View; label: string; short: string; icon: typeof
 ]
 
 export function Navbar() {
-  const { view, go, role, setRole, openPalette } = useApp()
+  const { view, go, role, setRole, openPalette, clock12, setClock12 } = useApp()
   const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform)
 
   return (
@@ -57,6 +57,15 @@ export function Navbar() {
             <div className="hidden sm:block">
               <RoleToggle role={role} setRole={setRole} size="sm" />
             </div>
+            <button
+              onClick={() => setClock12(!clock12)}
+              className="btn-ghost !px-2.5 font-mono text-xs"
+              aria-label={clock12 ? 'Using 12-hour clock. Switch to 24-hour' : 'Using 24-hour clock. Switch to 12-hour'}
+              title="Switch clock format"
+            >
+              <Clock size={15} className="text-gold" />
+              <span className="tabular-nums">{clock12 ? '12h' : '24h'}</span>
+            </button>
             <button onClick={openPalette} className="btn-ghost !px-2.5 sm:!px-3" aria-label="Search (Ctrl+K)">
               <Search size={16} />
               <span className="hidden text-slate-400 md:inline">Search</span>
